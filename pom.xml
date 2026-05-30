@@ -6,7 +6,7 @@
 
   <groupId>org.operaton.bpm.extension</groupId>
   <artifactId>operaton-javascript-polyglot</artifactId>
-  <version>2.1.0</version>
+  <version>0.1.0</version>
   <packaging>jar</packaging>
 
   <name>Operaton JavaScript Polyglot</name>

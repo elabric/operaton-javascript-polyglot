@@ -44,14 +44,17 @@ public Maven repository, download the jar from the GitHub Releases page and add
 it to the application classpath, or install it into a local or private Maven
 repository.
 
+The plugin has its own version lifecycle. The current plugin version is
+`0.1.0`; it is built and tested against Operaton `2.1.0`.
+
 Install a downloaded release jar into the local Maven repository with:
 
 ```sh
 mvn install:install-file \
-  -Dfile=operaton-javascript-polyglot-2.1.0.jar \
+  -Dfile=operaton-javascript-polyglot-0.1.0.jar \
   -DgroupId=org.operaton.bpm.extension \
   -DartifactId=operaton-javascript-polyglot \
-  -Dversion=2.1.0 \
+  -Dversion=0.1.0 \
   -Dpackaging=jar
 ```
 
@@ -62,7 +65,7 @@ to the Operaton application:
 <dependency>
   <groupId>org.operaton.bpm.extension</groupId>
   <artifactId>operaton-javascript-polyglot</artifactId>
-  <version>2.1.0</version>
+  <version>0.1.0</version>
 </dependency>
 ```
 
@@ -164,6 +167,7 @@ directly as JavaScript objects.
 
 This plugin is deliberately opt-in:
 
+- Plugin version `0.1.0` is compatible with Operaton `2.1.0`.
 - `javascript` is not changed.
 - `ecmascript` is not changed.
 - Existing Spin/JUEL/Groovy behavior is not changed.
