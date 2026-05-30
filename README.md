@@ -1,7 +1,7 @@
 # Operaton JavaScript Polyglot
 
 This repository builds the
-`org.operaton.bpm.extension:operaton-javascript-polyglot` jar. It adds opt-in
+`com.elabric.bpm.extensions:operaton-javascript-polyglot` jar. It adds opt-in
 Operaton script languages named `javascript-polyglot` and
 `typescript-polyglot`.
 
@@ -45,16 +45,16 @@ it to the application classpath, or install it into a local or private Maven
 repository.
 
 The plugin has its own version lifecycle. The current plugin version is
-`0.1.0`; it is built and tested against Operaton `2.1.0`.
+`0.2.0`; it is built and tested against Operaton `2.1.0`.
 
 Install a downloaded release jar into the local Maven repository with:
 
 ```sh
 mvn install:install-file \
-  -Dfile=operaton-javascript-polyglot-0.1.0.jar \
-  -DgroupId=org.operaton.bpm.extension \
+  -Dfile=operaton-javascript-polyglot-0.2.0.jar \
+  -DgroupId=com.elabric.bpm.extensions \
   -DartifactId=operaton-javascript-polyglot \
-  -Dversion=0.1.0 \
+  -Dversion=0.2.0 \
   -Dpackaging=jar
 ```
 
@@ -63,9 +63,9 @@ to the Operaton application:
 
 ```xml
 <dependency>
-  <groupId>org.operaton.bpm.extension</groupId>
+  <groupId>com.elabric.bpm.extensions</groupId>
   <artifactId>operaton-javascript-polyglot</artifactId>
-  <version>0.1.0</version>
+  <version>0.2.0</version>
 </dependency>
 ```
 
@@ -86,6 +86,8 @@ the dependency. The jar contains:
 
 That auto-configuration registers `JavaScriptPolyglotScriptEnvPlugin` as a
 `ProcessEnginePlugin` bean.
+
+Java classes live below the `com.elabric.bpm.extensions.javascriptpolyglot` package.
 
 ## Plain Operaton Usage
 
@@ -167,7 +169,7 @@ directly as JavaScript objects.
 
 This plugin is deliberately opt-in:
 
-- Plugin version `0.1.0` is compatible with Operaton `2.1.0`.
+- Plugin version `0.2.0` is compatible with Operaton `2.1.0`.
 - `javascript` is not changed.
 - `ecmascript` is not changed.
 - Existing Spin/JUEL/Groovy behavior is not changed.
@@ -198,7 +200,7 @@ The tests cover:
 ## Tagged Builds
 
 Pushing any Git tag triggers the `Build Tagged Artifact` GitHub Actions workflow.
-The workflow runs `mvn -B package` on Java 17 and uploads the built jar from
-`target/operaton-javascript-polyglot-*.jar` as a workflow artifact. Attach that
-jar to the corresponding GitHub Release so users can download it without Maven
-Central.
+The workflow runs `mvn -B package` on Java 17 and uploads the built jar and POM
+from `target/operaton-javascript-polyglot-*` as workflow artifacts. Attach both
+files to the corresponding GitHub Release so users can download them without
+Maven Central.

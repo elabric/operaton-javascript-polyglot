@@ -1,2 +1,2 @@
-org.operaton.bpm.extension.javascriptpolyglot.JavaScriptPolyglotScriptEngineFactory
-org.operaton.bpm.extension.javascriptpolyglot.TypeScriptPolyglotScriptEngineFactory
+com.elabric.bpm.extensions.javascriptpolyglot.JavaScriptPolyglotScriptEngineFactory
+com.elabric.bpm.extensions.javascriptpolyglot.TypeScriptPolyglotScriptEngineFactory
