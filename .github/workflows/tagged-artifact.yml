@@ -29,11 +29,40 @@ jobs:
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
+      - name: Resolve project version
+        id: project
+        run: |
+          VERSION="$(mvn -q -DforceStdout help:evaluate -Dexpression=project.version)"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Check Maven Central
+        id: central
+        run: |
+          set -euo pipefail
+          ARTIFACT_URL="https://repo1.maven.org/maven2/com/elabric/bpm/extensions/operaton-javascript-polyglot/${{ steps.project.outputs.version }}/operaton-javascript-polyglot-${{ steps.project.outputs.version }}.pom"
+          if curl --fail --silent --head "$ARTIFACT_URL" > /dev/null; then
+            echo "published=true" >> "$GITHUB_OUTPUT"
+            echo "Version ${{ steps.project.outputs.version }} is already published to Maven Central."
+          else
+            echo "published=false" >> "$GITHUB_OUTPUT"
+            echo "Version ${{ steps.project.outputs.version }} is not published to Maven Central yet."
+          fi
+
       - name: Publish GPG public key
+        if: steps.central.outputs.published != 'true'
         run: |
           set -euo pipefail
           GPG_FINGERPRINT="$(gpg --batch --list-secret-keys --with-colons --fingerprint | awk -F: '/^fpr:/ { print $10; exit }')"
           test -n "$GPG_FINGERPRINT"
+
+          CHECK_HOME="$(mktemp -d)"
+          if gpg --homedir "$CHECK_HOME" --batch --keyserver keyserver.ubuntu.com --recv-keys "$GPG_FINGERPRINT"; then
+            rm -rf "$CHECK_HOME"
+            echo "GPG public key is already available on keyserver.ubuntu.com."
+            exit 0
+          fi
+          rm -rf "$CHECK_HOME"
+
           gpg --batch --keyserver keyserver.ubuntu.com --send-keys "$GPG_FINGERPRINT"
 
           for attempt in 1 2 3 4 5; do
@@ -50,16 +79,20 @@ jobs:
           exit 1
 
       - name: Publish to Maven Central
+        if: steps.central.outputs.published != 'true'
         run: mvn -B -Pcentral-release deploy
         env:
           CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
           CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
 
+      - name: Build release artifacts
+        if: steps.central.outputs.published == 'true'
+        run: mvn -B package
+
       - name: Prepare release POM
         run: |
-          VERSION=$(mvn -q -DforceStdout help:evaluate -Dexpression=project.version)
-          cp pom.xml "target/operaton-javascript-polyglot-${VERSION}.pom"
+          cp pom.xml "target/operaton-javascript-polyglot-${{ steps.project.outputs.version }}.pom"
 
       - name: Upload release artifacts
         uses: actions/upload-artifact@v4
