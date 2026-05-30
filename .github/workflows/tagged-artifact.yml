@@ -27,10 +27,17 @@ jobs:
       - name: Build package
         run: mvn -B package
 
-      - name: Upload JAR artifact
+      - name: Prepare release POM
+        run: |
+          VERSION=$(mvn -q -DforceStdout help:evaluate -Dexpression=project.version)
+          cp pom.xml "target/operaton-javascript-polyglot-${VERSION}.pom"
+
+      - name: Upload release artifacts
         uses: actions/upload-artifact@v4
         with:
           name: operaton-javascript-polyglot-${{ github.ref_name }}
-          path: target/operaton-javascript-polyglot-*.jar
+          path: |
+            target/operaton-javascript-polyglot-*.jar
+            target/operaton-javascript-polyglot-*.pom
           if-no-files-found: error
           retention-days: 30
