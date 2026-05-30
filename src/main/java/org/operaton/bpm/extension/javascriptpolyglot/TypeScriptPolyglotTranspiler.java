@@ -129,7 +129,7 @@ public class TypeScriptPolyglotTranspiler {
             }
 
             var message = String.join("\n", parsedDiagnostics.stream().map(Diagnostic::format).toList());
-            var firstDiagnostic = parsedDiagnostics.getFirst();
+            var firstDiagnostic = parsedDiagnostics.get(0);
 
             if (firstDiagnostic.line > 0 && firstDiagnostic.column > 0) {
                 return new ScriptException(message, sourceName, firstDiagnostic.line, firstDiagnostic.column);

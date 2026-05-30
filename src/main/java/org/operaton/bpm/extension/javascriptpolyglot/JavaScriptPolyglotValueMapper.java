@@ -68,7 +68,7 @@ public class JavaScriptPolyglotValueMapper {
     }
 
     public Object toJavaScriptMethodResult(Object source, Method method, List<Object> arguments, Object result) {
-        if (source instanceof VariableScope variableScope && !arguments.isEmpty() && arguments.getFirst() instanceof String variableName) {
+        if (source instanceof VariableScope variableScope && !arguments.isEmpty() && arguments.get(0) instanceof String variableName) {
             if ("getVariable".equals(method.getName())) {
                 return toJavaScriptProcessVariable(variableName, result, variableScope, false);
             }
